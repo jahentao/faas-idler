@@ -35,6 +35,16 @@ docker stack deploy func -c docker-compose.yml
 
 The faas-idler is installed as part of the [helm chart](https://github.com/openfaas/faas-netes/tree/master/chart/openfaas), make sure that you pass the argument "--set faasIdler.dryRun=false" if you want the idler to go live and make changes to the API.
 
+#### Nomad
+
+You may need first refer to [faas-nomad](https://github.com/hashicorp/faas-nomad#running-the-openfaas-application) for deploying OpenFaaS on Nomad.
+
+run `faas.hcl` and `monitoring.hcl`, then run
+
+```shell script
+nomad run ./faas-idler.hcl
+``` 
+
 #### Activating a function for scale to zero
 
 Now decorate some functions with the label: `com.openfaas.scale.zero: "true"` and watch the idler scale them to zero. You should also change the `-dry-run` flag to `false`. For example:

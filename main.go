@@ -28,6 +28,7 @@ var dryRun bool
 
 var writeDebug bool
 
+// the Credentials is used to login in OpenFaaS gateway
 type Credentials struct {
 	Username string
 	Password string
@@ -65,6 +66,7 @@ func main() {
 	} else {
 		log.Printf("Unable to read password: %s", err)
 	}
+	// above are all configuration, including args and environment variables passed in
 
 	client := &http.Client{}
 	version, err := getVersion(client, config.GatewayURL, &credentials)
@@ -77,7 +79,9 @@ func main() {
 
 	fmt.Printf(`dry_run: %t
 gateway_url: %s
-inactivity_duration: %s `, dryRun, config.GatewayURL, config.InactivityDuration)
+inactivity_duration: %s
+reconcile_interval: %s
+`, dryRun, config.GatewayURL, config.InactivityDuration, config.ReconcileInterval)
 
 	if len(config.GatewayURL) == 0 {
 		fmt.Println("gateway_url (faas-netes/faas-swarm) is required.")
@@ -87,7 +91,7 @@ inactivity_duration: %s `, dryRun, config.GatewayURL, config.InactivityDuration)
 	for {
 		reconcile(client, config, &credentials)
 		time.Sleep(config.ReconcileInterval)
-		fmt.Printf("\n")
+		//fmt.Printf("\n")
 	}
 }
 
